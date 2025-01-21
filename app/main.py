@@ -1,7 +1,7 @@
 import os
+import joblib
 from flask import Flask, make_response, request, render_template
 from model import Model
-import joblib
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "./data"
