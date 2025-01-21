@@ -1,4 +1,6 @@
-document.getElementById('upload-button').addEventListener('click', async () => {
+const upload_btn = document.getElementById('upload-button')
+
+upload_btn.addEventListener('click', async (e) => {
     const fileInput = document.getElementById('file-input');
     if (fileInput.files.length === 0) {
         alert('Please select a file to upload.');
@@ -14,6 +16,7 @@ document.getElementById('upload-button').addEventListener('click', async () => {
     });
 
     if (response.ok) {
+        upload_btn.disabled = true;
         const res = await response.json();
         console.log(res.data);
         displayDataPreview(res.data);
@@ -24,18 +27,23 @@ document.getElementById('upload-button').addEventListener('click', async () => {
 });
 
 document.getElementById('train-button').addEventListener('click', async () => {
+    btn = document.getElementById('train-button')
+    btn.textContent = 'Training...';
+    btn.disabled = true;
+
     const response = await fetch('/train', {
         method: 'POST'
     });
 
     if (response.ok) {
-        document.getElementById('train-button').disabled = true;
-        const label = document.createElement('label');
-        label.textContent = 'Model Trained!';
-        document.getElementById('data-preview-section').appendChild(label);
-        const fields = await response.json();
-        displayPredictionForm(fields);
+        btn.textContent = 'Model Trained!';
+        const res = await response.json();
+        console.log(res.fields);
+        console.log(res);
+        displayPredictionForm(res.fields);
+        displayMetrics(res.metrics);
     } else {
+        btn.disabled = false;
         alert('Failed to train model.');
     }
 });
@@ -57,7 +65,7 @@ document.getElementById('predict-button').addEventListener('click', async () => 
     }
 });
 
-function displayDataPreview(data) {
+async function displayDataPreview(data) {
     const previewSection = document.getElementById('data-preview-section');
     previewSection.classList.remove('hidden');
 
@@ -98,27 +106,50 @@ function displayDataPreview(data) {
     previewDiv.appendChild(table);
 }
 
+function displayMetrics(metrics) {
+    document.getElementById('metrics').classList.remove('hidden');
+    const accuracy = document.getElementById('accuracy-value');
+    const f1_score = document.getElementById('f1-score-value');
+    accuracy.textContent = metrics.accuracy;
+    f1_score.textContent = metrics.f1_score;
+}
+
 function displayPredictionForm(fields) {
     const predictionSection = document.getElementById('prediction-section');
     predictionSection.classList.remove('hidden');
 
     const form = document.getElementById('predict-form');
     form.innerHTML = '';
-
+    fields.sort((a, b) => a.name.localeCompare(b.name));
     fields.forEach(field => {
         const label = document.createElement('label');
-        label.textContent = field.name;
+        const span = document.createElement('span');
+        span.textContent = field.name;
         const input = document.createElement('input');
-        input.type = field.type;
+        if (field.type === 'integer' || field.type === 'float') {
+            input.type = 'number';
+        } else {
+            input.type = 'text';
+        }
         input.name = field.name;
+        input.required = true;
+        label.appendChild(span);
+        label.appendChild(input);
         form.appendChild(label);
-        form.appendChild(input);
+        // form.appendChild(input);
     });
 
     document.getElementById('predict-button').classList.remove('hidden');
 }
 
 function displayPredictionResult(result) {
+    const prediction = document.getElementById('prediction');
     const resultDiv = document.getElementById('prediction-result');
-    resultDiv.innerHTML = JSON.stringify(result, null, 2);
+    if (result.prediction == 1) {
+        resultDiv.textContent = 'Yes (1)';
+        resultDiv.style.backgroundColor = '#ffcccc';
+    } else {
+        resultDiv.textContent = 'No (0)';
+        resultDiv.style.backgroundColor = '#ccffcc';
+    }
 }

@@ -25,7 +25,7 @@ class Model:
         self.model.fit(self.X_train, self.y_train)
         acc = accuracy_score(self.y_test, self.model.predict(self.X_test))
         f1 = f1_score(self.y_test, self.model.predict(self.X_test))
-        return acc, f1
+        return round(acc, 2)*100, round(f1, 2)
     
 
     def predict(self, data):

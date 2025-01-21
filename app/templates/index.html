@@ -20,12 +20,26 @@
             <h2>Data Preview</h2>
             <div id="data-preview"></div>
             <button id="train-button" class="hidden">Train Model</button>
+            <article id="metrics" class="hidden">
+                <h3>Model Metrics:</h3>
+                <div id="metrics-content">
+                    <div>
+                        <h4>Accuracy:</h4>
+                        <p id="accuracy-value"></p>
+                    </div>
+                    <div>
+                        <h4>F1-score:</h4>
+                        <p id="f1-score-value"></p>
+                </div>
+            </article>
         </section>
         <section id="prediction-section" class="hidden">
             <h2>Predict</h2>
             <form id="predict-form"></form>
-            <button id="predict-button" class="hidden">Predict</button>
-            <div id="prediction-result"></div>
+            <div id="predict-area">
+                <button id="predict-button" class="hidden">Predict</button>
+                <div id="prediction">Defect Status: <span id="prediction-result"></span></div>
+            </div>
         </section>
     </div>
     <script src="{{ url_for('static', filename='index.js') }}"></script>

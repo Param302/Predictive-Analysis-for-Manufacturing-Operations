@@ -29,26 +29,31 @@ def upload():
 def train():
     data_path = f"{app.config['UPLOAD_FOLDER']}/data.csv"
     mymodel = Model(data_path)
-    mymodel.train()
+    metrics = mymodel.train()
     joblib.dump(mymodel, "static/model/model.pkl")
     fields = [{"name": col, "type": ("float" if "f" in mymodel.X_train[col].dtype.str else "integer" )} for col in mymodel.X_train.columns]
     print(fields)
-    return make_response({"message": "Model trained", "fields": fields}, 200)
+    print(metrics)
+    return make_response({"message": "Model trained", "fields": fields, "metrics": {"accuracy": metrics[0], "f1_score": metrics[1]}}, 200)
 
 @app.route("/predict", methods=["POST"])
 def predict():
     mymodel = joblib.load("static/model/model.pkl")
     data = request.form.to_dict()
+    print(data)
+    data = pd.DataFrame(data, index=[0])
+    print(data)
     prediction = mymodel.predict(data)
-    metrics = mymodel.metrics()
-    return make_response({"prediction": prediction, "metrics": {"accuracy": metrics[0], "f1-score": metrics[1]}}, 200)
+    print(prediction)
+    return make_response({"prediction": int(prediction)}, 200)
 
 
 def get_data(file, n):
     data = pd.read_csv(file)
+    # round all the values to 3 decimal places
+    data = data.round(3)
+    data.to_csv(file, index=False)
     return data.head(n).to_dict(orient="records")
-
-    ...
 
 
 if __name__ == "__main__":

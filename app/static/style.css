@@ -48,6 +48,27 @@ h2 {
     background-color: #f9f9f9;
 }
 
+#metrics {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+}
+
+#metrics-content {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+#metrics-content div {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
 button {
     background-color: #4CAF50;
     color: white;
@@ -59,4 +80,38 @@ button {
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+#predict-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+}
+
+#predict-form label {
+    width: 600px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#predict-area {
+    margin-top: 1rem;
+    width: 500px;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#prediction {
+    display: flex;
+    gap: 10px;
+    padding: 1rem 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+#prediction-result {
+    font-weight: bold;
 }
