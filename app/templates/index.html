@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Analysis for Manufacturing Operations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Predictive Analysis for Manufacturing Operations</h1>
+    </header>
+    <div class="container">
+        <section id="upload-section">
+            <h2>Upload CSV File</h2>
+            <input type="file" id="file-input" accept=".csv">
+            <button id="upload-button">Upload</button>
+        </section>
+        <section id="data-preview-section" class="hidden">
+            <h2>Data Preview</h2>
+            <div id="data-preview"></div>
+            <button id="train-button" class="hidden">Train Model</button>
+        </section>
+        <section id="prediction-section" class="hidden">
+            <h2>Predict</h2>
+            <form id="predict-form"></form>
+            <button id="predict-button" class="hidden">Predict</button>
+            <div id="prediction-result"></div>
+        </section>
+    </div>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

@@ -31,7 +31,8 @@ def predict():
     mymodel = joblib.load("static/model.pkl")
     data = request.form.to_dict()
     prediction = mymodel.predict(data)
-    return make_response({"prediction": prediction}, 200)
+    metrics = mymodel.metrics()
+    return make_response({"prediction": prediction, "metrics": {"accuracy": metrics[0], "f1-score": metrics[1]}}, 200)
 
 
 if __name__ == "__main__":
