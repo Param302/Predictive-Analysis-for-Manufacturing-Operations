@@ -30,13 +30,14 @@ def train():
     data_path = f"{app.config['UPLOAD_FOLDER']}/data.csv"
     mymodel = Model(data_path)
     mymodel.train()
-    joblib.dump(mymodel, "static/model.pkl")
-    fields = [{"name": col, "type": mymodel.data[col].dtype} for col in mymodel.data.columns]
+    joblib.dump(mymodel, "static/model/model.pkl")
+    fields = [{"name": col, "type": ("float" if "f" in mymodel.X_train[col].dtype.str else "integer" )} for col in mymodel.X_train.columns]
+    print(fields)
     return make_response({"message": "Model trained", "fields": fields}, 200)
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    mymodel = joblib.load("static/model.pkl")
+    mymodel = joblib.load("static/model/model.pkl")
     data = request.form.to_dict()
     prediction = mymodel.predict(data)
     metrics = mymodel.metrics()
